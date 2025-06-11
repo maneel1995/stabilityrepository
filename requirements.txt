@@ -1,0 +1,12 @@
+ray
+datasets
+transformers
+torch
+opencv-python
+pillow
+ultralytics
+seaborn
+mtcnn
+tensorflow
+protobuf==3.20.3
+cariosvg
