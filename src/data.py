@@ -4,6 +4,7 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
+
 def download_file(url: str, output_path: str):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     try:
@@ -39,11 +40,18 @@ def download_dataset(full: bool, max_workers: int):
 
     download_jobs = generate_urls(start, end, base_url, output_dir)
 
-    print(f"🔽 Starting download of {end - start} files with {max_workers} threads...\n")
+    print(
+        f"🔽 Starting download of {end - start} files with {max_workers} threads...\n"
+    )
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(download_file, url, path): (url, path) for url, path in download_jobs}
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading", ncols=100):
+        futures = {
+            executor.submit(download_file, url, path): (url, path) 
+            for url, path in download_jobs
+        }
+        for future in tqdm(
+            as_completed(futures), total=len(futures), desc="Downloading", ncols=100
+        ):
             result = future.result()
             tqdm.write(result)
 
@@ -51,9 +59,21 @@ def download_dataset(full: bool, max_workers: int):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Download WIT dataset files from HuggingFace.")
-    parser.add_argument("--full", action="store_true", help="Download the full dataset (330 files)")
-    parser.add_argument("--workers", type=int, default=4, help="Number of parallel download threads (default: 4)")
+    parser = argparse.ArgumentParser(
+        description="Download WIT dataset files from HuggingFace."
+    )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        default=False,
+        help="Download the full dataset (330 files)",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Number of parallel download threads (default: 4)",
+    )
 
     args = parser.parse_args()
     download_dataset(full=args.full, max_workers=args.workers)
