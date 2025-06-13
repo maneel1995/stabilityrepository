@@ -9,7 +9,23 @@ from transformers import CLIPProcessor, CLIPModel
 from ultralytics import YOLO
 
 class ImageClassifier:
+    """
+    ImageClassifier class for detecting faces and identifying eyeglasses in images.
+
+    This class uses a YOLO model for face detection and a CLIP model for classification tasks.
+    It processes batches of images and returns bounding box information and truth values.
+    """
     def __init__(self):
+        """
+        Initializes the ImageClassifier with pre-trained YOLO and CLIP models.
+
+        Attributes:
+            yolo_model (YOLO): Pre-trained YOLO model for face detection.
+            clip_model (CLIPModel): Pre-trained CLIP model for classification tasks.
+            clip_processor (CLIPProcessor): Processor for preparing inputs for the CLIP model.
+            promptsv1 (list): Text prompts for identifying human beings.
+            promptsv2 (list): Text prompts for identifying eyeglasses or sunglasses.
+        """
         model_path = hf_hub_download(
             repo_id="arnabdhar/YOLOv8-Face-Detection", filename="model.pt"
         )
@@ -33,6 +49,19 @@ class ImageClassifier:
 
     # BEGIN: Updated __call__ method
     def __call__(self, batch: Dict[str, np.ndarray]):
+        """
+        Processes a batch of images to detect faces and classify eyeglasses.
+
+        Args:
+            batch (Dict[str, np.ndarray]): A dictionary containing image data. 
+                The key "image" should map to a list of image dictionaries, 
+                each containing image bytes.
+
+        Returns:
+            Dict[str, Any]: The input batch dictionary with added keys:
+                - "bounding_boxes": Arrow array containing bounding box information.
+                - "truth_values": List of boolean values indicating whether eyeglasses were detected.
+        """
         ##### Can be made more efficient by using a batch of images instead of processing one by one.
         bbox_struct = pa.struct(
             [

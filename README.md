@@ -2,6 +2,8 @@
 
 A distributed image processing pipeline that detects faces and identifies people wearing eyeglasses in images. 
 
+![Eyeglasses Detection Example](scripts/sample.png)
+
 ## Overview
 
 This project implements an end-to-end pipeline for processing images to detect people wearing eyeglasses. It uses:
@@ -20,7 +22,7 @@ This project implements an end-to-end pipeline for processing images to detect p
 ## Installation
 
 ```
-git clone <repository-url>
+git clone https://github.com/maneel1995/stabilityrepository.git
 cd stabilityrepository
 pip install -r requirements.txt
 ```
@@ -92,8 +94,12 @@ The pipeline uses two models:
 - Ideal for batch inference on billions of records.
 
 #### 📊 Final Output
-- **105 images** identified with people wearing eyeglasses across the first two partitions. Approximate 15 images of the 105 have been manually identified to be False. 
+- **105 images** identified with people wearing eyeglasses across the first two partitions. Approximate 15 images of the 105 have been manually identified to be False. For the first two partitions,a manual overview of 1284 persons identified through the first YoloModel indicate that there are approximately 124 images of people with spectacles. This shows:-
 
+- **Precision** :90/105 = 85.74%
+- **Recall** *:90/124 = 72%
+
+  *-> This indicates that the Yolo Model has 100% accuracy. 
 
 ### Architecture Tradeoffs
 - **MTCNN** and **HaarCascade** (OpenCV):
