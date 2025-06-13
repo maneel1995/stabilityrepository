@@ -22,8 +22,8 @@ This project implements an end-to-end pipeline for processing images to detect p
 ## Installation
 
 ```
-git clone https://github.com/maneel1995/stabilityrepository.git
-cd stabilityrepository
+git clone https://github.com/maneel1995/stabilitydehw.git
+cd stabilitydehw
 pip install -r requirements.txt
 ```
 
@@ -99,7 +99,7 @@ The pipeline uses two models:
 - **Precision** :90/105 = 85.74%
 - **Recall** *:90/124 = 72%
 
-  *-> This indicates that the Yolo Model has 100% accuracy. 
+  *-> This indicates that the Yolo Model has 100% accuracy of identifying persons. 
 
 ### Architecture Tradeoffs
 - **MTCNN** and **HaarCascade** (OpenCV):
