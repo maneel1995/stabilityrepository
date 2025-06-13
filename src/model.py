@@ -28,7 +28,7 @@ class ImageClassifier:
         self.promptsv2 = [
             "a person wearing clear eyeglasses",
             "a person wearing black sunglasses",
-            "a photo of a person not wearing glasses",
+            "a person not wearing eyeglasses or sunglasses",
         ]
 
     # BEGIN: Updated __call__ method

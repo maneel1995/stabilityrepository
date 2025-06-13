@@ -77,10 +77,47 @@ The pipeline uses two models:
     - Leverages zero-shot classification capabilities through carefully crafted text prompts
 
 ### Architecture Choices
+#### YOLOv8 for Person Detection
+- Used as the first filter to check if an image contains a person.
+- Chosen for its speed, accuracy, and ability to run batch inference.
 
-This project uses Yolov8 to detect if the image contains a person. If yes, then filter once again using a CLIP model. Then filter to check if the person is indeed wearing eyeglasses. This results in 91 images belonging to people with eyeglasses in the first two partitions and they can be found here. 
+#### CLIP for Semantic Filtering
+- **Second filter**: Confirms the detected object is indeed a person.
+- **Third filter**: Checks if the person is wearing eyeglasses.
+- CLIP is preferred over **MTCNN** and **Haarcascade** due to better performance on small, diverse datasets.
+- Supports **prompt tuning** (e.g., “a person wearing eyeglasses”) for improved precision.
+
+#### Ray for Distributed Processing
+- Enables fast and scalable processing across multiple nodes.
+- Ideal for batch inference on billions of records.
+
+#### 📊 Final Output
+- **105 images** identified with people wearing eyeglasses across the first two partitions. Approximate 15 images of the 105 have been manually identified to be False. 
+
 
 ### Architecture Tradeoffs
-While this pipeline uses a simple filtering process. Other simpler models are in MTCCN library. We could also have used HaarCascade for eyeglass detection. But, the accuracy was not high. Higher accuracy at the cost of detection of people with eyeglasses can be achieved by increasing the confidence of the CLIP model. Also, more prompt tuning can be done in the CLIP model. Other techniques  Running OpenCV HaarCascade or LBP classifiers in parallel: Easy to implement but their performance on real-world noisy images is poor, and may generate too many false detections.
+- **MTCNN** and **HaarCascade** (OpenCV):
+  - Easier to implement.
+  - Poor performance on real-world, noisy images.
+  - High rate of false positives, especially for eyeglass detection.
+
+- **LBP Classifiers** (OpenCV):
+  - Can be run in parallel.
+  - Similar limitations to HaarCascade in terms of reliability.
+
+- **CLIP Model Tradeoffs**:
+  - Provides better semantic understanding via prompt tuning.
+  - Increasing CLIP's confidence threshold improves precision but may miss some valid cases.
+  - Additional prompt tuning (e.g., `"a person wearing spectacles"`, `"man with glasses"`) could improve accuracy further.
+
+- **Vision Transformers (ViT)**:
+  - More powerful alternatives like ViT could have been explored.
+  - Potentially higher accuracy, but with increased computational cost.
+
+- **General Tradeoff**:
+  - Most models struggle with false detections.
+  - Raising confidence cutoffs helps reduce false positives but may lower recall.
+
+
 
 
